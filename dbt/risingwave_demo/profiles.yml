@@ -1,0 +1,12 @@
+risingwave_demo:
+  outputs:
+    dev:
+      dbname: dev
+      host: localhost
+      password: ''
+      port: 4566
+      schema: public
+      threads: 1
+      type: risingwave
+      user: root
+  target: dev

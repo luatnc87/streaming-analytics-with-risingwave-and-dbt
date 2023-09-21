@@ -1,0 +1,2 @@
+dbt-core==1.5.6
+dbt-risingwave==1.5.1
