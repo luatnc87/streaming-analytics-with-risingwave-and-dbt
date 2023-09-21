@@ -1,0 +1,7 @@
+.idea
+dbt/.env
+dbt/logs
+dbt/risingwave_demo/logs
+dbt/risingwave_demo/target
+dbt/risingwave_demo/dbt_packages
+dbt/risingwave_demo/.user.yml
