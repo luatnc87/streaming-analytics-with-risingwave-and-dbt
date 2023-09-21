@@ -1,0 +1,6 @@
+sources:
+  - name: dev_public_source
+    database: dev
+    schema: public
+    tables:
+      - name: user_behaviors
