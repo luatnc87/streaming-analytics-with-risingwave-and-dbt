@@ -160,17 +160,28 @@ There are 1 unused configuration paths:
 | thread0   |        308 | 2023-09-20 05:30:... | 2023-09-21 05:30:... |
 ```
 
+# Conclusion
+In conclusion, the synergy between RisingWave and dbt presents an exciting opportunity to streamline the development of a robust and efficient streaming analytics platform.
+
+RisingWave's simplicity and potential performance enhancements, when combined with dbt's powerful data transformation capabilities, create a compelling ecosystem. This partnership enables organizations to build a streaming analytics platform that not only processes data seamlessly but also allows for sophisticated data modeling, transformation, and analytics.
+
+By leveraging RisingWave's strengths in stream processing and dbt's proficiency in data modeling, organizations can achieve a more agile and effective approach to real-time analytics. This combination empowers teams to rapidly develop, iterate, and deploy streaming analytics solutions while maintaining data quality and consistency.
+
+In essence, the integration of RisingWave and dbt offers a holistic solution for organizations seeking to harness the power of real-time data analytics, making it easier and more effective to derive valuable insights from streaming data sources.
+
+While RisingWave is touted for its potential performance improvements, it's important to note that we have not yet confirmed the extent of these enhancements. Initial indications suggest a promising outlook: stateless computing appears to offer a significant boost, ranging from 10% to 30%, while stateful computing shows the potential for an astonishing 10-fold or greater improvement.
+
+To gain a more comprehensive understanding of RisingWave's performance capabilities, we eagerly anticipate the forthcoming performance report. Regardless, in the realm of stream processing, the combination of simplicity and performance remains a valuable asset, and RisingWave demonstrates its commitment to delivering on both fronts and more.
 
 # Supporting Links
 * <a href="https://www.risingwave.com/blog/rethinking-stream-processing-and-streaming-databases/" target="_blank">Rethinking Stream Processing and Streaming Databases</a>
 * <a href="https://docs.risingwave.com/docs/current/use-dbt/" target="_blank">Use dbt for data transformations</a>
 * <a href="https://www.risingwave.com/blog/rethinking-stream-processing-and-streaming-databases/" target="_blank"></a>
-* <a href="" target="_blank"></a>
-* <a href="" target="_blank"></a>
-* <a href="" target="_blank"></a>
-* <a href="" target="_blank"></a>
-* <a href="" target="_blank"></a>
-* <a href="" target="_blank"></a>
+* <a href="https://docs.risingwave.com/docs/current/clickstream-analysis/" target="_blank">Clickstream analysis</a>
+* <a href="https://www.clouddatainsights.com/real-time-olap-databases-and-streaming-databases-a-comparison/" target="_blank">Real-time OLAP Databases and Streaming Databases: A Comparison</a>
+* <a href="https://www.risingwave.com/blog/start-your-stream-processing-journey-with-just-4-lines-of-code/" target="_blank">Start Your Stream Processing Journey With Just 4 Lines of Code</a>
+* <a href="https://medium.com/@RisingWave_Engineering/top-8-streaming-databases-for-real-time-analytics-a-comprehensive-guide-f45d7b3b35c8" target="_blank">Top 8 Streaming Databases for Real-Time Analytics: A Comprehensive Guide</a>
+
 
 
 
