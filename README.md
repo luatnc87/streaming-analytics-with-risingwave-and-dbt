@@ -301,7 +301,6 @@ To gain a more comprehensive understanding of RisingWave's performance capabilit
 # Supporting Links
 * <a href="https://www.risingwave.com/blog/rethinking-stream-processing-and-streaming-databases/" target="_blank">Rethinking Stream Processing and Streaming Databases</a>
 * <a href="https://docs.risingwave.com/docs/current/use-dbt/" target="_blank">Use dbt for data transformations</a>
-* <a href="https://www.risingwave.com/blog/rethinking-stream-processing-and-streaming-databases/" target="_blank"></a>
 * <a href="https://docs.risingwave.com/docs/current/clickstream-analysis/" target="_blank">Clickstream analysis</a>
 * <a href="https://www.clouddatainsights.com/real-time-olap-databases-and-streaming-databases-a-comparison/" target="_blank">Real-time OLAP Databases and Streaming Databases: A Comparison</a>
 * <a href="https://www.risingwave.com/blog/start-your-stream-processing-journey-with-just-4-lines-of-code/" target="_blank">Start Your Stream Processing Journey With Just 4 Lines of Code</a>
