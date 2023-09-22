@@ -14,6 +14,8 @@ In this tutorial, you will discover how to track the evolving click count of a w
 
 ![demo_architecture.png](images%2Fdemo_architecture.png)
 
+# The Content
+
 
 ## Connect RisingWave to data streams
 After configuring the data stream in Redpanda with JSON format using the demonstration cluster, we can establish a connection to the streams using the following SQL statement. This data stream includes details about user interactions, including what each user is clicking on and the corresponding event timestamps.
@@ -37,12 +39,15 @@ CREATE SOURCE user_behaviors (
 
 ## Create dbt project
 ### Install dbt-risingwave adapter
+The first step is to install the `dbt-risingwave` adapter. You can do this by running the following commands:
 ```shell
 cd ./dbt
+# install dbt-core and dbt-risingwave
 pip install -r requirements.txt
 ```
 
 ### Init dbt project
+The second step is to initialize a dbt project with the `risingwave_demo` name by running following commands:
 ```shell
 # create dbt project with risisingwave name
 # input parameters to set up a profile to connect to the local RisingWave:
@@ -50,17 +55,18 @@ pip install -r requirements.txt
 # - port: 4566
 # - user: root
 dbt init risingwave_demo
-# check
+# check that the adapter is installed successfully
 cd risingwave_demo
 dbt debug --profiles-dir .
 ```
-The content of the `profiles.yml` as below:
+
+The content of the `profiles.yml` is as below:
 ```yaml
 risingwave_demo:
   outputs:
     dev:
       dbname: dev
-      host: localhost
+      host: 127.0.0.1
       password: ''
       port: 4566
       schema: public
@@ -70,7 +76,9 @@ risingwave_demo:
   target: dev
 ```
 
-### Creat a source
+### Create a source
+The next step is to create a source that corresponds with the `user_behaviors` SOURCE created on the RisingWave database previously.
+The content is defined in the `risingwave_demo\models\source.yml` file.
 ```yaml
 sources:
   - name: dev_public_source
@@ -81,14 +89,15 @@ sources:
 ```
 
 ### Define materialized views and query the results
-In this tutorial, we will create a materialized view that counts how many times a thread was clicked on over a day.
+Finally, we will create some analytics models. In this guide, we will create a materialized view that counts the number of times a thread was clicked on over a day.
 
-First, the tumble() function will map each event into a 10-minute window to create an intermediary table t, where the events will be aggregated on target_id and window_time to get the number of clicks for each thread. The events will also be filtered by target_type and behavior_type.
+First, the `tumble()` function will map each event into a 10-minute window to create an intermediary `table t`, where the events will be aggregated on `target_id` and `window_time` to get the number of clicks for each thread. The events will also be filtered by `target_type` and `behavior_type`.
 
-Next, the hop() function will create 24-hour time windows every 10 minutes. Each event will be mapped to corresponding windows. Finally, they will be grouped by target_id and window_time to calculate the total number of clicks of each thread within 24 hours.
+Next, the `hop()` function will create `24-hour` time windows every `10 minutes`. Each event will be mapped to corresponding windows. Finally, they will be grouped by `target_id` and `window_time` to calculate the total number of clicks of each thread within `24 hours`.
 
-The model should be like this:
+The content of the model should be like this:
 ```sql
+
 {{ config(materialized='materializedview') }}
 
 WITH t AS (
@@ -128,16 +137,20 @@ GROUP BY
 ```
 
 ### Query the results
-You can use a SQL tool to query the most often viewed threads with the following statement.
+You can query the most often viewed threads using the following SQL statement in a SQL client tool:
 
 ```sql
 SELECT * FROM thread_view_count
 ORDER BY view_count DESC, window_start
 LIMIT 10;
 ```
+
+The results should be like this:
+
 ![results.png](images%2Fresults.png)
 
-Or you can leverage the `dbt show` command:
+Alternatively, you can use the `dbt show` command:
+
 ```shell
 dbt show --profiles-dir . --inline "select * from thread_view_count limit 10"
 
