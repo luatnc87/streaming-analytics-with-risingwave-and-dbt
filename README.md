@@ -15,7 +15,115 @@ In this tutorial, you will discover how to track the evolving click count of a w
 ![demo_architecture.png](images%2Fdemo_architecture.png)
 
 # The Content
+- [Connect RisingWave to data streams](#connect-risingwave-to-data-streams)
+- [Understanding the Tools](#understanding-the-tools)
+- [Set up the RisingWave, dbt with Docker Compose](set-up-risingwave-dbt-with-docker-compose)
+- [Create a dbt project for streaming analytics](#create-a-dbt-project-for-streaming-analytics)
+- [Conclusion](#conclusion)
+- [Supporting Links](#supporting-links)
 
+
+## Understanding the Tools
+### RisingWave
+RisingWave is a **distributed SQL database** for **stream processing**. It is designed to reduce the complexity and cost of building real-time applications. RisingWave consumes streaming data, performs incremental computations when new data comes in, and updates results dynamically. As a database system, RisingWave maintains results in its own storage so that users can access data efficiently.
+RisingWave accepts data from sources like Apache Kafka, Apache Pulsar, Amazon Kinesis, Redpanda, and materialized CDC sources.
+
+### dbt
+dbt, which stands for Data Build Tool, is a command-line tool that revolutionizes the way data transformations and modeling are done. Here's a deeper dive into dbt's capabilities:
+
+- **Modular Data Transformations**: dbt uses SQL and YAML files to define data transformations and models. This modular approach allows you to break down complex transformations into smaller, more manageable pieces, enhancing mantainability and version control.
+- **Data Testing**: dbt facilitates data testing by allowing you to define expectations about your data. It helps ensure data quality by automatically running tests against your transformed data.
+- **Version Control**: dbt projects can be version controlled with tools like Git, enabling collaboration among data professionals while keeping a history of changes.
+- **Incremental Builds**: dbt supports incremental builds, meaning it only processes data that has changed since the last run. This feature saves time and resources when working with large datasets.
+- **Orchestration**: While dbt focuses on data transformations and modeling, it can be integrated with orchestration tools like Apache Airflow or dbt Cloud to create automated data pipelines.
+
+## Set up the RisingWave, dbt with Docker Compose
+### Pre-requisites
+To follow along, you need to:
+
+- **Install Docker and Docker Compose in your machine**. You can follow [this guide](https://docs.docker.com/engine/install/?_gl=1*187dp4*_ga*MTAzNDgyNDI0My4xNjkzNDY2NDcy) to install Docker and [this one](https://docs.docker.com/compose/install/?_gl=1*187dp4*_ga*MTAzNDgyNDI0My4xNjkzNDY2NDcy) to install Docker Compose.
+
+This tutorial uses Docker Compose and a shell script to set up the required resources. Docker saves you from installing additional dependencies local. You can quickly start and stop the instances.
+
+### Set up the RisingWave
+The compose file is stored in `risingwave/docker-compose.yml` that import the base compose file stored in `risingwave\docker\base-docker-compose.yml`. . You can go through these files and make any necessary customization, for example, changing the ports where the instances start or installing additional dependencies. You can go through these files and make any necessary customization, for example, changing the ports where the instances start or installing additional dependencies.
+
+```yaml
+version: "3"
+services:
+  compactor-0:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: compactor-0
+  compute-node-0:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: compute-node-0
+  etcd-0:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: etcd-0
+  frontend-node-0:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: frontend-node-0
+  grafana-0:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: grafana-0
+  meta-node-0:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: meta-node-0
+  minio-0:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: minio-0
+  prometheus-0:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: prometheus-0
+  message_queue:
+    extends:
+      file: ./docker/base-docker-compose.yml
+      service: message_queue
+  datagen:
+    build: ./datagen
+    depends_on: [message_queue]
+    command:
+      - /bin/sh
+      - -c
+      - /datagen --mode clickstream --qps 2 kafka --brokers message_queue:29092
+    restart: always
+    container_name: datagen
+volumes:
+  compute-node-0:
+    external: false
+  etcd-0:
+    external: false
+  grafana-0:
+    external: false
+  minio-0:
+    external: false
+  prometheus-0:
+    external: false
+  message_queue:
+    external: false
+name: risingwave-compose
+```
+In this guide, we use a `datagen` program written in `go` language to generate sample clickstream data.
+
+```yaml
+  datagen:
+    build: ./datagen
+    depends_on: [message_queue]
+    command:
+      - /bin/sh
+      - -c
+      - /datagen --mode clickstream --qps 2 kafka --brokers message_queue:29092
+    restart: always
+    container_name: datagen
+```
 
 ## Connect RisingWave to data streams
 After configuring the data stream in Redpanda with JSON format using the demonstration cluster, we can establish a connection to the streams using the following SQL statement. This data stream includes details about user interactions, including what each user is clicking on and the corresponding event timestamps.
@@ -37,11 +145,15 @@ CREATE SOURCE user_behaviors (
 ) FORMAT PLAIN ENCODE JSON;
 ```
 
-## Create dbt project
+## Create a dbt project for streaming analytics
 ### Install dbt-risingwave adapter
 The first step is to install the `dbt-risingwave` adapter. You can do this by running the following commands:
 ```shell
-cd ./dbt
+# create a virtual environment
+cd dbt
+python -m venv .env
+source .env/bin/activate
+
 # install dbt-core and dbt-risingwave
 pip install -r requirements.txt
 ```
