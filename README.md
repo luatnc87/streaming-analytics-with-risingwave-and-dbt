@@ -247,6 +247,7 @@ GROUP BY
     window_start,
     window_end
 ```
+
 Note: RisingWave accepts these four materializations:
 - `table`: Create a table. 
 - `view`: Create a view.
@@ -264,7 +265,9 @@ LIMIT 10;
 
 The results should be like this:
 
-![results.png](images%2Fresults.png)
+<p align="center">
+    <img src="images/results.png" width="600"/>
+</p>
 
 Alternatively, you can use the `dbt show` command:
 
