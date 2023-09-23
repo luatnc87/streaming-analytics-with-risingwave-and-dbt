@@ -247,6 +247,11 @@ GROUP BY
     window_start,
     window_end
 ```
+Note: RisingWave accepts these four materializations:
+- `table`: Create a table. 
+- `view`: Create a view.
+- `ephemeral`: This materialization uses `common table expressions` in RisingWave under the hood.
+- `materializedview`: Create a materialized view. This materialization is corresponding to the `incremental` one in dbt. Since RisingWave is designed to use materialized view to manage data transformation in an incremental way, you don’t need to use the `incremental` materialization and can just use `materializedview`.
 
 ### Query the results
 You can query the most often viewed threads using the following SQL statement in a SQL client tool:
