@@ -265,7 +265,7 @@ LIMIT 10;
 
 The results should be like this:
 
-<p align="center">
+<p>
     <img src="images/results.png" width="600"/>
 </p>
 
